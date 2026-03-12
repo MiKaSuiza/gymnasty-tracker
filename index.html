@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(GymnastyTracker());
+
+class GymnastyTracker extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Gymnasty Tracker',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0操作121212),
+        primaryColor: const Color(0xFF39FF14),
+        hintColor: const Color(0xFF39FF14),
+        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
+      ),
+      home: Dashboard(),
+    );
+  }
+}
+
+class Dashboard extends StatefulWidget {
+  @override
+  _DashboardState createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  List<String> fitnessElements = ["Pull Ups", "Muscle Ups", "Front Lever"];
+
+  void _addElement(String name) {
+    setState(() => fitnessElements.add(name));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('GYMNASTY TRACKER', style: TextStyle(color: Color(0xFF39FF14), fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: ListView.builder(
+        itemCount: fitnessElements.length,
+        itemBuilder: (context, index) {
+          final item = fitnessElements[index];
+          return Dismissible(
+            key: Key(item),
+            background: Container(color: Colors.redAccent, child: Icon(Icons.delete, color: Colors.white)),
+            onDismissed: (direction) {
+              setState(() => fitnessElements.removeAt(index));
+            },
+            child: ListTile(
+              title: Text(item, style: TextStyle(fontSize: 18)),
+              trailing: Icon(Icons.chevron_right, color: Color(0xFF39FF14)),
+              onTap: () {
+                // Navigate to History View
+              },
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF39FF14),
+        child: const Icon(Icons.add, color: Colors.black),
+        onPressed: () => _showAddDialog(),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF39FF14),
+            foregroundColor: Colors.black,
+            minimumSize: Size(double.infinity, 50),
+          ),
+          onPressed: () { /* Start Session Logic */ },
+          child: Text("START NEW SESSION", style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+      ),
+    );
+  }
+
+  void _showAddDialog() {
+    TextEditingController _controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("New Fitness Element"),
+        content: TextField(
+          controller: _controller,
+          autofocus: true,
+          decoration: InputDecoration(hintText: "e.g. Handstand Pushup"),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+          TextButton(
+            onPressed: () {
+              if (_controller.text.isNotEmpty) _addElement(_controller.text);
+              Navigator.pop(context);
+            },
+            child: Text("Add", style: TextStyle(color: Color(0xFF39FF14))),
+          ),
+        ],
+      ),
+    );
+  }
+}
