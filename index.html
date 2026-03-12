@@ -1,106 +1,1031 @@
-import 'package:flutter/material.dart';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gymnasty Tracker</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #FFFFFF;
+            --highlight-color: #39FF14;
+            --surface-color: #1e1e1e;
+            --error-color: #ff3333;
+            --header-h: 60px;
+        }
 
-void main() => runApp(GymnastyTracker());
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-class GymnastyTracker extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Gymnasty Tracker',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0操作121212),
-        primaryColor: const Color(0xFF39FF14),
-        hintColor: const Color(0xFF39FF14),
-        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
-      ),
-      home: Dashboard(),
-    );
-  }
-}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-class Dashboard extends StatefulWidget {
-  @override
-  _DashboardState createState() => _DashboardState();
-}
+        /* Helpers */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        
+        /* Layout */
+        header {
+            height: var(--header-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--highlight-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-class _DashboardState extends State<Dashboard> {
-  List<String> fitnessElements = ["Pull Ups", "Muscle Ups", "Front Lever"];
+        header h1 {
+            font-size: 1.25rem;
+            color: var(--highlight-color);
+            flex: 1;
+            text-align: center;
+        }
 
-  void _addElement(String name) {
-    setState(() => fitnessElements.add(name));
-  }
+        .header-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            min-width: 60px;
+            text-align: left;
+        }
+        
+        .header-btn:active {
+            color: var(--highlight-color);
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('GYMNASTY TRACKER', style: TextStyle(color: Color(0xFF39FF14), fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: ListView.builder(
-        itemCount: fitnessElements.length,
-        itemBuilder: (context, index) {
-          final item = fitnessElements[index];
-          return Dismissible(
-            key: Key(item),
-            background: Container(color: Colors.redAccent, child: Icon(Icons.delete, color: Colors.white)),
-            onDismissed: (direction) {
-              setState(() => fitnessElements.removeAt(index));
-            },
-            child: ListTile(
-              title: Text(item, style: TextStyle(fontSize: 18)),
-              trailing: Icon(Icons.chevron_right, color: Color(0xFF39FF14)),
-              onTap: () {
-                // Navigate to History View
-              },
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF39FF14),
-        child: const Icon(Icons.add, color: Colors.black),
-        onPressed: () => _showAddDialog(),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF39FF14),
-            foregroundColor: Colors.black,
-            minimumSize: Size(double.infinity, 50),
-          ),
-          onPressed: () { /* Start Session Logic */ },
-          child: Text("START NEW SESSION", style: TextStyle(fontWeight: FontWeight.bold)),
-        ),
-      ),
-    );
-  }
+        .header-spacer {
+            min-width: 60px;
+        }
 
-  void _showAddDialog() {
-    TextEditingController _controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("New Fitness Element"),
-        content: TextField(
-          controller: _controller,
-          autofocus: true,
-          decoration: InputDecoration(hintText: "e.g. Handstand Pushup"),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
-          TextButton(
-            onPressed: () {
-              if (_controller.text.isNotEmpty) _addElement(_controller.text);
-              Navigator.pop(context);
-            },
-            child: Text("Add", style: TextStyle(color: Color(0xFF39FF14))),
-          ),
-        ],
-      ),
-    );
-  }
-}
+        main {
+            flex: 1;
+            padding: 1rem;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Buttons Core */
+        .btn {
+            background-color: var(--surface-color);
+            color: var(--highlight-color);
+            border: 1px solid var(--highlight-color);
+            padding: 1rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .btn:active {
+            background-color: var(--highlight-color);
+            color: var(--bg-color);
+        }
+
+        .btn-primary {
+            background-color: var(--highlight-color);
+            color: var(--bg-color);
+        }
+
+        .btn-primary:active {
+            opacity: 0.8;
+            background-color: #2fdd10;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* FAB */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--highlight-color);
+            color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            line-height: 1;
+            box-shadow: 0 4px 15px rgba(57, 255, 20, 0.4);
+            cursor: pointer;
+            border: none;
+            z-index: 50;
+        }
+        
+        .fab:active {
+            transform: scale(0.95);
+        }
+        
+        @media(min-width: 640px) {
+            .fab {
+                right: calc(50% - 300px + 2rem);
+            }
+        }
+
+        /* Lists */
+        .list-container {
+            list-style: none;
+            overflow-x: hidden; /* For swipe to delete */
+        }
+
+        .list-item-wrapper {
+            position: relative;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--error-color); /* Behind background for swipe */
+        }
+
+        .list-item {
+            background-color: var(--surface-color);
+            padding: 1.25rem 1rem;
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.2s ease-out;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            font-size: 1.1rem;
+        }
+        
+        .list-item:active {
+            border-color: var(--highlight-color);
+        }
+
+        .list-item.selected {
+            border-color: var(--highlight-color);
+            background-color: rgba(57, 255, 20, 0.1);
+        }
+
+        .delete-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--error-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.25rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        /* Forms / Inputs */
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+            font-size: 0.875rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+        }
+        
+        /* Modal for new element */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 1rem;
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            background-color: var(--surface-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--highlight-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Session Cards */
+        .session-card {
+            background-color: var(--surface-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--highlight-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .delete-card-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #ff5555;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.25rem;
+        }
+
+        .session-card-header {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1.25rem;
+            color: var(--highlight-color);
+            padding-right: 2rem;
+        }
+
+        .session-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .session-inputs .input-group {
+            margin-bottom: 0;
+        }
+        
+        .session-inputs input {
+            text-align: center;
+            padding: 0.75rem;
+        }
+
+        /* History View */
+        .history-item {
+            background-color: var(--surface-color);
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 2px solid var(--highlight-color);
+        }
+
+        .history-date {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .history-stats {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 1.1rem;
+            flex-wrap: wrap;
+        }
+        
+        .history-stat-val {
+            color: var(--highlight-color);
+            font-weight: bold;
+        }
+
+        /* View Management */
+        .view {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+            padding-bottom: 6rem;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #aaa;
+            margin-top: 4rem;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button id="header-back-btn" class="header-btn hidden">◀ Back</button>
+        <div id="header-spacer-left" class="header-spacer"></div>
+        <h1 id="header-title">Gymnasty</h1>
+        <div class="header-spacer"></div>
+    </header>
+
+    <main>
+        <!-- HOME VIEW -->
+        <section id="home-view" class="view active">
+            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: center; height: 100%; margin-top: 4rem;">
+                <button id="start-session-btn" class="btn btn-primary" style="padding: 1.5rem; font-size: 1.25rem;">Start Workout Session</button>
+                <button id="nav-exercises-btn" class="btn">List of Exercises</button>
+                <button id="nav-global-history-btn" class="btn">Gym Sessions History</button>
+            </div>
+        </section>
+
+        <!-- EXERCISES LIST VIEW -->
+        <section id="exercises-view" class="view">
+            <div id="master-empty" class="empty-state hidden">
+                <p>No fitness elements yet.</p>
+                <p class="mt-2">Tap the <strong style="color:var(--highlight-color);">+</strong> button below to add your first exercise.</p>
+            </div>
+            <ul id="master-list" class="list-container">
+                <!-- Dynamically populated -->
+            </ul>
+            <button id="fab-add" class="fab">+</button>
+        </section>
+
+        <!-- START SESSION: SELECT EXERCISES -->
+        <section id="session-setup-view" class="view">
+            <h2 class="mb-2" style="font-size: 1.25rem; text-align: center;">Select Exercises</h2>
+            <ul id="session-setup-list" class="list-container">
+                <!-- Dynamically populated -->
+            </ul>
+            <button id="begin-workout-btn" class="btn btn-primary mt-2" disabled>Begin Workout</button>
+        </section>
+
+        <!-- ACTIVE SESSION VIEW -->
+        <section id="active-session-view" class="view">
+            <div id="active-session-cards">
+                <!-- Dynamically populated -->
+            </div>
+            
+            <button id="add-to-session-btn" class="btn mt-1 mb-2" style="border-style: dashed; opacity: 0.8;">+ Add Exercise to Session</button>
+
+            <button id="finish-session-btn" class="btn btn-primary mt-2">Finish Gym Session</button>
+        </section>
+
+        <!-- HISTORY VIEW -->
+        <section id="history-view" class="view">
+            <h2 id="history-title" class="mb-2" style="font-size: 1.5rem; color: var(--highlight-color); text-align: center; margin-bottom: 2rem;"></h2>
+            <div id="history-empty" class="empty-state hidden">
+                <p>No workout history for this exercise yet.</p>
+            </div>
+            <div id="history-list">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- GLOBAL SESSIONS HISTORY VIEW -->
+        <section id="global-history-view" class="view">
+            <h2 class="mb-2" style="font-size: 1.5rem; color: var(--highlight-color); text-align: center; margin-bottom: 2rem;">Gym Sessions</h2>
+            <div id="global-history-empty" class="empty-state hidden">
+                <p>No gym sessions recorded yet.</p>
+            </div>
+            <div id="global-history-list">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for New Element -->
+    <div id="new-element-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 class="mb-2" style="color: var(--highlight-color);">New Fitness Element</h2>
+            <div class="input-group">
+                <label for="element-name">Exercise Name</label>
+                <input type="text" id="element-name" placeholder="e.g. Bench Press" autocomplete="off">
+            </div>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn">Cancel</button>
+                <button id="modal-save" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Session Duration -->
+    <div id="session-duration-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 class="mb-2" style="color: var(--highlight-color);">Session Duration</h2>
+            <div class="input-group">
+                <label for="session-duration-input">Duration (minutes)</label>
+                <input type="number" id="session-duration-input" inputmode="numeric" placeholder="e.g. 60">
+            </div>
+            <div class="modal-actions">
+                <button id="duration-modal-cancel" class="btn">Cancel</button>
+                <button id="duration-modal-save" class="btn btn-primary">Save Session</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA STORE ---
+        const STORAGE_KEY = 'gymnasty_data';
+        
+        let appData = {
+            elements: [], // { id, name }
+            history: {},  // elementId -> [{ date, weight, sets, reps }]
+            sessions: [], // [{ id, date, duration }]
+        };
+
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                appData = JSON.parse(stored);
+                if (!appData.history) appData.history = {};
+                if (!appData.sessions) appData.sessions = [];
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // --- STATE ---
+        let currentView = 'home-view';
+        let setupSelectedIds = new Set();
+        let activeSessionElements = []; // Full element objects
+        let activeSessionInputs = {}; // Stores { weight, sets, reps: [rep1, rep2...] } per element ID
+        
+        // --- DOM ELEMENTS ---
+        const views = document.querySelectorAll('.view');
+        const headerTitle = document.getElementById('header-title');
+        const headerBackBtn = document.getElementById('header-back-btn');
+        const headerSpacerLeft = document.getElementById('header-spacer-left');
+        
+        const homeView = document.getElementById('home-view');
+        const navExercisesBtn = document.getElementById('nav-exercises-btn');
+        const navGlobalHistoryBtn = document.getElementById('nav-global-history-btn');
+
+        const exercisesView = document.getElementById('exercises-view');
+        const masterList = document.getElementById('master-list');
+        const masterEmpty = document.getElementById('master-empty');
+        const fabAdd = document.getElementById('fab-add');
+        const startSessionBtn = document.getElementById('start-session-btn');
+        
+        const sessionSetupView = document.getElementById('session-setup-view');
+        const sessionSetupList = document.getElementById('session-setup-list');
+        const beginWorkoutBtn = document.getElementById('begin-workout-btn');
+
+        const activeSessionView = document.getElementById('active-session-view');
+        const activeSessionCards = document.getElementById('active-session-cards');
+        const finishSessionBtn = document.getElementById('finish-session-btn');
+        const addToSessionBtn = document.getElementById('add-to-session-btn');
+
+        const historyView = document.getElementById('history-view');
+        const historyTitle = document.getElementById('history-title');
+        const historyEmpty = document.getElementById('history-empty');
+        const historyList = document.getElementById('history-list');
+
+        const modal = document.getElementById('new-element-modal');
+        const modalInput = document.getElementById('element-name');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalSave = document.getElementById('modal-save');
+
+        const durationModal = document.getElementById('session-duration-modal');
+        const durationInput = document.getElementById('session-duration-input');
+        const durationModalCancel = document.getElementById('duration-modal-cancel');
+        const durationModalSave = document.getElementById('duration-modal-save');
+
+        const globalHistoryEmpty = document.getElementById('global-history-empty');
+        const globalHistoryList = document.getElementById('global-history-list');
+
+        // --- NAVIGATION ---
+        function switchView(viewId, title) {
+            views.forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            headerTitle.textContent = title;
+            currentView = viewId;
+
+            if (viewId === 'home-view' || viewId === 'active-session-view') {
+                headerBackBtn.classList.add('hidden');
+                headerSpacerLeft.classList.remove('hidden');
+            } else {
+                headerBackBtn.classList.remove('hidden');
+                headerSpacerLeft.classList.add('hidden');
+            }
+            
+            if (viewId === 'exercises-view') {
+                renderMasterList();
+            } else if (viewId === 'global-history-view') {
+                renderGlobalHistory();
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        headerBackBtn.addEventListener('click', () => {
+            if (currentView === 'session-setup-view' || currentView === 'history-view' || currentView === 'exercises-view' || currentView === 'global-history-view') {
+                switchView('home-view', 'Gymnasty Tracker');
+            }
+        });
+
+        navExercisesBtn.addEventListener('click', () => {
+            switchView('exercises-view', 'Exercises');
+        });
+
+        navGlobalHistoryBtn.addEventListener('click', () => {
+            switchView('global-history-view', 'Gym History');
+        });
+
+        // --- EXERCISES VIEW ---
+        function renderMasterList() {
+            masterList.innerHTML = '';
+            
+            if (appData.elements.length === 0) {
+                masterEmpty.classList.remove('hidden');
+                return;
+            }
+            
+            masterEmpty.classList.add('hidden');
+
+            appData.elements.forEach(el => {
+                const li = document.createElement('li');
+                li.className = 'list-item-wrapper';
+                
+                li.innerHTML = `
+                    <div class="delete-background">
+                        <span>Delete</span>
+                        <span>Delete</span>
+                    </div>
+                    <div class="list-item" data-id="${el.id}">
+                        <span>${el.name}</span>
+                        <span style="color:var(--highlight-color); font-size: 1.5rem;">›</span>
+                    </div>
+                `;
+                
+                const itemEl = li.querySelector('.list-item');
+                
+                itemEl.addEventListener('click', (e) => {
+                    if (li.dataset.swiping === 'true') return;
+                    showHistory(el);
+                });
+
+                // Swipe to Delete Logic
+                let startX = 0;
+                let currentX = 0;
+                let isDragging = false;
+                
+                itemEl.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                    li.dataset.swiping = 'false';
+                    itemEl.style.transition = 'none';
+                }, {passive: true});
+
+                itemEl.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    currentX = e.touches[0].clientX - startX;
+                    
+                    if (Math.abs(currentX) > 10) {
+                        li.dataset.swiping = 'true';
+                        if(e.cancelable) e.preventDefault(); 
+                    }
+                    
+                    if (currentX > 100) currentX = 100;
+                    if (currentX < -100) currentX = -100;
+                    
+                    itemEl.style.transform = `translateX(${currentX}px)`;
+                }, {passive: false});
+
+                itemEl.addEventListener('touchend', (e) => {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    itemEl.style.transition = 'transform 0.2s ease-out';
+                    
+                    if (Math.abs(currentX) > 70) {
+                        itemEl.style.transform = `translateX(${currentX > 0 ? 1000 : -1000}px)`;
+                        setTimeout(() => deleteElement(el.id), 200);
+                    } else {
+                        itemEl.style.transform = 'translateX(0)';
+                    }
+                    setTimeout(() => { li.dataset.swiping = 'false'; }, 50);
+                });
+
+                masterList.appendChild(li);
+            });
+        }
+
+        function deleteElement(id) {
+            appData.elements = appData.elements.filter(e => e.id !== id);
+            delete appData.history[id];
+            saveData();
+            renderMasterList();
+        }
+
+        // --- FAB & NEW ELEMENT MODAL ---
+        fabAdd.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            modalInput.value = '';
+            setTimeout(() => modalInput.focus(), 100);
+        });
+
+        modalCancel.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        modalSave.addEventListener('click', () => {
+            const name = modalInput.value.trim();
+            if (name) {
+                appData.elements.push({ id: generateId(), name: name });
+                saveData();
+                renderMasterList();
+                modal.classList.add('hidden');
+            }
+        });
+
+        // --- SESSION SETUP ---
+        startSessionBtn.addEventListener('click', () => {
+            setupSelectedIds.clear();
+            
+            // Auto-select exercises if we are adding mid-session
+            if (activeSessionElements.length > 0) {
+                activeSessionElements.forEach(el => setupSelectedIds.add(el.id));
+            }
+            
+            renderSessionSetupList();
+            switchView('session-setup-view', activeSessionElements.length > 0 ? 'Add Exercises' : 'Setup Session');
+        });
+
+        addToSessionBtn.addEventListener('click', () => {
+            renderSessionSetupList();
+            switchView('session-setup-view', 'Add Exercises');
+        });
+
+        function renderSessionSetupList() {
+            sessionSetupList.innerHTML = '';
+            
+            // Check if we are adding mid-session
+            const addingMidSession = activeSessionElements.length > 0;
+            const alreadyInSessionIds = new Set(activeSessionElements.map(e => e.id));
+
+            updateBeginWorkoutBtn();
+
+            appData.elements.forEach(el => {
+                const li = document.createElement('li');
+                li.className = 'list-item-wrapper';
+                
+                const itemEl = document.createElement('div');
+                itemEl.className = 'list-item';
+                
+                const isAlreadyInSession = addingMidSession && alreadyInSessionIds.has(el.id);
+                
+                itemEl.innerHTML = `
+                    <span>${el.name} ${isAlreadyInSession ? '<span style="font-size:0.8em; color:#888;">(In session)</span>' : ''}</span>
+                    <span class="checkbox" style="color:var(--highlight-color); font-weight:bold;">${setupSelectedIds.has(el.id) ? '✓' : ''}</span>
+                `;
+                
+                if (setupSelectedIds.has(el.id)) {
+                    itemEl.classList.add('selected');
+                }
+                
+                // If it's already in the session, we don't allow unselecting it from here just visually indicate it
+                if (isAlreadyInSession) {
+                    itemEl.style.opacity = '0.6';
+                } else {
+                    itemEl.addEventListener('click', () => {
+                        if (setupSelectedIds.has(el.id)) {
+                            setupSelectedIds.delete(el.id);
+                            itemEl.classList.remove('selected');
+                            itemEl.querySelector('.checkbox').textContent = '';
+                        } else {
+                            setupSelectedIds.add(el.id);
+                            itemEl.classList.add('selected');
+                            itemEl.querySelector('.checkbox').textContent = '✓';
+                        }
+                        updateBeginWorkoutBtn();
+                    });
+                }
+                
+                li.appendChild(itemEl);
+                sessionSetupList.appendChild(li);
+            });
+        }
+        
+        function updateBeginWorkoutBtn() {
+            if (setupSelectedIds.size > 0) {
+                beginWorkoutBtn.removeAttribute('disabled');
+            } else {
+                beginWorkoutBtn.setAttribute('disabled', 'true');
+            }
+        }
+
+        // --- ACTIVE SESSION ---
+        function extractCurrentSessionState() {
+            document.querySelectorAll('.session-card').forEach(card => {
+                const id = card.dataset.id;
+                const setsInput = card.querySelector('.in-sets');
+                if(!setsInput) return;
+                
+                const repInputs = card.querySelectorAll('.in-reps');
+                let repsArr = [];
+                repInputs.forEach(ri => repsArr.push(ri.value));
+
+                const weightInputs = card.querySelectorAll('.in-weight'); // Updated to grab array of weights
+                let weightsArr = [];
+                weightInputs.forEach(wi => weightsArr.push(wi.value));
+
+                activeSessionInputs[id] = {
+                    weight: weightsArr,
+                    sets: setsInput ? setsInput.value : 3,
+                    reps: repsArr
+                };
+            });
+        }
+
+        beginWorkoutBtn.addEventListener('click', () => {
+            if (setupSelectedIds.size === 0) return;
+            
+            // Before re-rendering the active session, grab the current state of existing cards
+            extractCurrentSessionState();
+            
+            activeSessionElements = appData.elements.filter(e => setupSelectedIds.has(e.id));
+            
+            renderActiveSession();
+            switchView('active-session-view', 'Active Session');
+        });
+
+        function renderActiveSession() {
+            activeSessionCards.innerHTML = '';
+            
+            activeSessionElements.forEach((el) => {
+                
+                // Retrieve prior state if applying mid-session
+                const state = activeSessionInputs[el.id] || { weight: [], sets: 3, reps: [] };
+                const setsCount = parseInt(state.sets) || 3;
+                
+                const card = document.createElement('div');
+                card.className = 'session-card';
+                card.dataset.id = el.id;
+                card.innerHTML = `
+                    <button class="delete-card-btn" data-id="${el.id}">×</button>
+                    <div class="session-card-header">${el.name}</div>
+                    <div class="session-inputs" style="grid-template-columns: 1fr;">
+                        <div class="input-group">
+                            <label>Number of Sets</label>
+                            <input type="number" inputmode="numeric" pattern="[0-9]*" class="in-sets scrollable-num" data-id="${el.id}" value="${setsCount}">
+                        </div>
+                    </div>
+                    <div class="reps-container" style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+                        <!-- Reps generated dynamically -->
+                    </div>
+                `;
+                
+                const renderReps = (count) => {
+                    const repsContainer = card.querySelector('.reps-container');
+                    repsContainer.innerHTML = '';
+                    for (let i = 0; i < count; i++) {
+                        const repVal = state.reps[i] || ''; // restore value if it exists
+                        const weightVal = (state.weight && state.weight[i]) || ''; // restore value if it exists
+                        repsContainer.innerHTML += `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: end; background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 8px;">
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <label style="color:var(--highlight-color); text-align:center;">Set ${i+1} Weight</label>
+                                    <input type="number" inputmode="decimal" step="any" class="in-weight scrollable-num" data-id="${el.id}" placeholder="-" value="${weightVal}">
+                                </div>
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <label style="color:var(--highlight-color); text-align:center;">Set ${i+1} Reps</label>
+                                    <input type="number" inputmode="numeric" pattern="[0-9]*" class="in-reps scrollable-num" data-id="${el.id}" placeholder="-" value="${repVal}">
+                                </div>
+                            </div>
+                        `;
+                    }
+                };
+
+                renderReps(setsCount);
+                
+                // Remove card functionally mid-session
+                card.querySelector('.delete-card-btn').addEventListener('click', () => {
+                    extractCurrentSessionState();
+                    activeSessionElements = activeSessionElements.filter(e => e.id !== el.id);
+                    setupSelectedIds.delete(el.id);
+                    delete activeSessionInputs[el.id];
+                    renderActiveSession();
+                });
+                
+                // Listen to Set changes to re-render rep boxes
+                const setsInput = card.querySelector('.in-sets');
+                setsInput.addEventListener('change', (e) => {
+                    extractCurrentSessionState(); // Safe the current inputs for reps before re-rendering
+                    let newSets = parseInt(e.target.value) || 0;
+                    if (newSets < 0) newSets = 0;
+                    if (newSets > 20) newSets = 20; // sanity cap
+                    activeSessionInputs[el.id].sets = newSets;
+                    renderReps(newSets);
+                    attachScrollWheelHandlers(); // re-attach for new inputs
+                });
+                
+                activeSessionCards.appendChild(card);
+            });
+            
+            // Attach scroll wheel logic
+            attachScrollWheelHandlers();
+        }
+        
+        // --- SCROLL WHEEL TO ADJUST NUMBERS ---
+        function attachScrollWheelHandlers() {
+            document.querySelectorAll('.scrollable-num').forEach(input => {
+                input.addEventListener('wheel', (e) => {
+                    if (document.activeElement !== input) return; // Only if focused
+                    e.preventDefault();
+                    
+                    let step = parseFloat(input.getAttribute('step')) || 1;
+                    if (input.classList.contains('in-weight')) step = 2.5; // Common weight step
+                    
+                    let val = parseFloat(input.value) || 0;
+                    
+                    if (e.deltaY < 0) {
+                        val += step; // Scroll up = increase
+                    } else {
+                        val -= step; // Scroll down = decrease
+                    }
+                    
+                    if (val < 0) val = 0;
+                    
+                    // Format to remove trailing zeros if float
+                    input.value = parseFloat(val.toFixed(2));
+                }, { passive: false });
+            });
+        }
+
+        finishSessionBtn.addEventListener('click', () => {
+            durationModal.classList.remove('hidden');
+            durationInput.value = '';
+            setTimeout(() => durationInput.focus(), 100);
+        });
+
+        durationModalCancel.addEventListener('click', () => {
+            durationModal.classList.add('hidden');
+        });
+
+        durationModalSave.addEventListener('click', () => {
+            // Force an extraction to make sure we have the latest inputs right before saving
+            extractCurrentSessionState();
+
+            const dateStr = new Date().toLocaleDateString(undefined, {
+                year: 'numeric', month: 'short', day: 'numeric',
+                hour: '2-digit', minute:'2-digit'
+            });
+            const duration = durationInput.value.trim() || 'Unspecified';
+
+            Object.keys(activeSessionInputs).forEach(id => {
+                const state = activeSessionInputs[id];
+                const sets = state.sets;
+                
+                let weightVals = [];
+                let repVals = [];
+                let hasInput = false;
+
+                for (let i = 0; i < (parseInt(sets) || 0); i++) {
+                    let w = (state.weight && state.weight[i] !== undefined && state.weight[i] !== '') ? state.weight[i] : '-';
+                    let r = (state.reps && state.reps[i] !== undefined && state.reps[i] !== '') ? state.reps[i] : '-';
+                    if (w !== '-' || r !== '-') hasInput = true;
+                    weightVals.push(w);
+                    repVals.push(r);
+                }
+
+                const weightString = hasInput ? weightVals.join(', ') : '-';
+                const repsString = hasInput ? repVals.join(', ') : '-';
+
+                if (hasInput || (sets && sets !== '3')) {
+                    if (!appData.history[id]) {
+                        appData.history[id] = [];
+                    }
+                    appData.history[id].unshift({
+                        date: dateStr,
+                        weight: weightString,
+                        sets: sets || '-',
+                        reps: repsString
+                    });
+                }
+            });
+
+            // Save global session
+            appData.sessions.unshift({
+                id: generateId(),
+                date: dateStr,
+                duration: duration
+            });
+
+            saveData();
+            activeSessionElements = [];
+            activeSessionInputs = {};
+            setupSelectedIds.clear();
+            durationModal.classList.add('hidden');
+            switchView('home-view', 'Gymnasty Tracker');
+        });
+
+        // --- GLOBAL HISTORY VIEW ---
+        function renderGlobalHistory() {
+            globalHistoryList.innerHTML = '';
+            if (appData.sessions.length === 0) {
+                globalHistoryEmpty.classList.remove('hidden');
+            } else {
+                globalHistoryEmpty.classList.add('hidden');
+                appData.sessions.forEach(session => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <div class="history-date">${session.date}</div>
+                        <div class="history-stats">
+                            <div>Duration: <span class="history-stat-val">${session.duration}</span> ${session.duration !== 'Unspecified' ? 'mins' : ''}</div>
+                        </div>
+                    `;
+                    globalHistoryList.appendChild(item);
+                });
+            }
+        }
+
+        // --- HISTORY VIEW ---
+        function showHistory(element) {
+            historyTitle.textContent = `${element.name}`;
+            
+            historyList.innerHTML = '';
+            const hist = appData.history[element.id] || [];
+            
+            if (hist.length === 0) {
+                historyEmpty.classList.remove('hidden');
+            } else {
+                historyEmpty.classList.add('hidden');
+                hist.forEach(entry => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <div class="history-date">${entry.date}</div>
+                        <div class="history-stats">
+                            <div>W: <span class="history-stat-val">${entry.weight}</span></div>
+                            <div>S: <span class="history-stat-val">${entry.sets}</span></div>
+                            <div>R: <span class="history-stat-val">${entry.reps}</span></div>
+                        </div>
+                    `;
+                    historyList.appendChild(item);
+                });
+            }
+
+            switchView('history-view', 'History');
+        }
+
+        // --- INIT ---
+        loadData();
+        switchView('home-view', 'Gymnasty Tracker');
+
+    </script>
+</body>
+</html>
