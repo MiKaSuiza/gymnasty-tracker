@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    
-    <link rel="icon" type="image/png" href="icon.png">
-
-    <link rel="apple-touch-icon" href="icon.png">
-
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gymnasty Tracker</title>
@@ -41,12 +33,26 @@
         }
 
         /* Helpers */
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .mt-1 { margin-top: 0.5rem; }
-        .mt-2 { margin-top: 1rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 {
+            margin-top: 0.5rem;
+        }
+
+        .mt-2 {
+            margin-top: 1rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 1rem;
+        }
+
         /* Layout */
         header {
             height: var(--header-h);
@@ -78,7 +84,7 @@
             min-width: 60px;
             text-align: left;
         }
-        
+
         .header-btn:active {
             color: var(--highlight-color);
         }
@@ -151,11 +157,11 @@
             border: none;
             z-index: 50;
         }
-        
+
         .fab:active {
             transform: scale(0.95);
         }
-        
+
         @media(min-width: 640px) {
             .fab {
                 right: calc(50% - 300px + 2rem);
@@ -165,7 +171,8 @@
         /* Lists */
         .list-container {
             list-style: none;
-            overflow-x: hidden; /* For swipe to delete */
+            overflow-x: hidden;
+            /* For swipe to delete */
         }
 
         .list-item-wrapper {
@@ -173,7 +180,8 @@
             margin-bottom: 0.75rem;
             border-radius: 8px;
             overflow: hidden;
-            background-color: var(--error-color); /* Behind background for swipe */
+            background-color: var(--error-color);
+            /* Behind background for swipe */
         }
 
         .list-item {
@@ -191,7 +199,7 @@
             user-select: none;
             font-size: 1.1rem;
         }
-        
+
         .list-item:active {
             border-color: var(--highlight-color);
         }
@@ -243,12 +251,15 @@
             outline: none;
             border-color: var(--highlight-color);
         }
-        
+
         /* Modal for new element */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -256,7 +267,7 @@
             padding: 1rem;
             backdrop-filter: blur(4px);
         }
-        
+
         .modal-content {
             background-color: var(--surface-color);
             padding: 1.5rem;
@@ -264,7 +275,7 @@
             width: 100%;
             max-width: 400px;
             border: 1px solid var(--highlight-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .modal-actions {
@@ -280,7 +291,7 @@
             padding: 1.25rem;
             margin-bottom: 1.5rem;
             border-left: 4px solid var(--highlight-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             position: relative;
         }
 
@@ -314,7 +325,7 @@
         .session-inputs .input-group {
             margin-bottom: 0;
         }
-        
+
         .session-inputs input {
             text-align: center;
             padding: 0.75rem;
@@ -342,7 +353,7 @@
             font-size: 1.1rem;
             flex-wrap: wrap;
         }
-        
+
         .history-stat-val {
             color: var(--highlight-color);
             font-weight: bold;
@@ -360,22 +371,30 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         .empty-state {
             text-align: center;
             color: #aaa;
             margin-top: 4rem;
         }
-        
+
         .empty-state p {
             font-size: 1.1rem;
             line-height: 1.5;
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -388,10 +407,19 @@
     <main>
         <!-- HOME VIEW -->
         <section id="home-view" class="view active">
-            <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: center; height: 100%; margin-top: 4rem;">
-                <button id="start-session-btn" class="btn btn-primary" style="padding: 1.5rem; font-size: 1.25rem;">Start Workout Session</button>
+            <div
+                style="display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: center; height: 100%; margin-top: 2rem;">
+                <img src="./logo.jpg" alt="Gymnasty Tracker Logo"
+                    style="width: 250px; height: 250px; border-radius: 24px; box-shadow: 0 4px 20px rgba(57, 255, 20, 0.4); margin-bottom: 2rem; object-fit: cover;">
+                <button id="start-session-btn" class="btn btn-primary"
+                    style="padding: 1.5rem; font-size: 1.25rem;">Start Workout Session</button>
                 <button id="nav-exercises-btn" class="btn">List of Exercises</button>
                 <button id="nav-global-history-btn" class="btn">Gym Sessions History</button>
+                <div style="display: flex; gap: 1rem; width: 100%; margin-top: 1rem;">
+                    <button id="export-btn" class="btn" style="flex: 1; font-size: 0.9rem; padding: 0.75rem;">Export CSV</button>
+                    <button id="import-btn" class="btn" style="flex: 1; font-size: 0.9rem; padding: 0.75rem;">Import CSV</button>
+                    <input type="file" id="import-file" accept=".csv" class="hidden">
+                </div>
             </div>
         </section>
 
@@ -399,7 +427,8 @@
         <section id="exercises-view" class="view">
             <div id="master-empty" class="empty-state hidden">
                 <p>No fitness elements yet.</p>
-                <p class="mt-2">Tap the <strong style="color:var(--highlight-color);">+</strong> button below to add your first exercise.</p>
+                <p class="mt-2">Tap the <strong style="color:var(--highlight-color);">+</strong> button below to add
+                    your first exercise.</p>
             </div>
             <ul id="master-list" class="list-container">
                 <!-- Dynamically populated -->
@@ -421,15 +450,17 @@
             <div id="active-session-cards">
                 <!-- Dynamically populated -->
             </div>
-            
-            <button id="add-to-session-btn" class="btn mt-1 mb-2" style="border-style: dashed; opacity: 0.8;">+ Add Exercise to Session</button>
+
+            <button id="add-to-session-btn" class="btn mt-1 mb-2" style="border-style: dashed; opacity: 0.8;">+ Add
+                Exercise to Session</button>
 
             <button id="finish-session-btn" class="btn btn-primary mt-2">Finish Gym Session</button>
         </section>
 
         <!-- HISTORY VIEW -->
         <section id="history-view" class="view">
-            <h2 id="history-title" class="mb-2" style="font-size: 1.5rem; color: var(--highlight-color); text-align: center; margin-bottom: 2rem;"></h2>
+            <h2 id="history-title" class="mb-2"
+                style="font-size: 1.5rem; color: var(--highlight-color); text-align: center; margin-bottom: 2rem;"></h2>
             <div id="history-empty" class="empty-state hidden">
                 <p>No workout history for this exercise yet.</p>
             </div>
@@ -440,7 +471,9 @@
 
         <!-- GLOBAL SESSIONS HISTORY VIEW -->
         <section id="global-history-view" class="view">
-            <h2 class="mb-2" style="font-size: 1.5rem; color: var(--highlight-color); text-align: center; margin-bottom: 2rem;">Gym Sessions</h2>
+            <h2 class="mb-2"
+                style="font-size: 1.5rem; color: var(--highlight-color); text-align: center; margin-bottom: 2rem;">Gym
+                Sessions</h2>
             <div id="global-history-empty" class="empty-state hidden">
                 <p>No gym sessions recorded yet.</p>
             </div>
@@ -483,7 +516,7 @@
     <script>
         // --- DATA STORE ---
         const STORAGE_KEY = 'gymnasty_data';
-        
+
         let appData = {
             elements: [], // { id, name }
             history: {},  // elementId -> [{ date, weight, sets, reps }]
@@ -512,23 +545,26 @@
         let setupSelectedIds = new Set();
         let activeSessionElements = []; // Full element objects
         let activeSessionInputs = {}; // Stores { weight, sets, reps: [rep1, rep2...] } per element ID
-        
+
         // --- DOM ELEMENTS ---
         const views = document.querySelectorAll('.view');
         const headerTitle = document.getElementById('header-title');
         const headerBackBtn = document.getElementById('header-back-btn');
         const headerSpacerLeft = document.getElementById('header-spacer-left');
-        
+
         const homeView = document.getElementById('home-view');
         const navExercisesBtn = document.getElementById('nav-exercises-btn');
         const navGlobalHistoryBtn = document.getElementById('nav-global-history-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const importFile = document.getElementById('import-file');
 
         const exercisesView = document.getElementById('exercises-view');
         const masterList = document.getElementById('master-list');
         const masterEmpty = document.getElementById('master-empty');
         const fabAdd = document.getElementById('fab-add');
         const startSessionBtn = document.getElementById('start-session-btn');
-        
+
         const sessionSetupView = document.getElementById('session-setup-view');
         const sessionSetupList = document.getElementById('session-setup-list');
         const beginWorkoutBtn = document.getElementById('begin-workout-btn');
@@ -570,13 +606,13 @@
                 headerBackBtn.classList.remove('hidden');
                 headerSpacerLeft.classList.add('hidden');
             }
-            
+
             if (viewId === 'exercises-view') {
                 renderMasterList();
             } else if (viewId === 'global-history-view') {
                 renderGlobalHistory();
             }
-            
+
             window.scrollTo(0, 0);
         }
 
@@ -594,21 +630,102 @@
             switchView('global-history-view', 'Gym History');
         });
 
+        // --- EXPORT / IMPORT ---
+        exportBtn.addEventListener('click', () => {
+            let csvContent = "Type,Id,Name,Date,Duration,Weight,Sets,Reps\n";
+            appData.elements.forEach(el => {
+                csvContent += `Element,${el.id},"${(el.name || '').replace(/"/g, '""')}",,,,,\n`;
+            });
+            appData.sessions.forEach(sess => {
+                csvContent += `Session,${sess.id},,"${(sess.date || '').replace(/"/g, '""')}","${(sess.duration || '').replace(/"/g, '""')}",,,\n`;
+            });
+            for (const [elId, historyArray] of Object.entries(appData.history)) {
+                historyArray.forEach(entry => {
+                    csvContent += `History,${elId},,"${(entry.date || '').replace(/"/g, '""')}",,"${(entry.weight || '').replace(/"/g, '""')}","${(entry.sets || '').replace(/"/g, '""')}","${(entry.reps || '').replace(/"/g, '""')}"\n`;
+                });
+            }
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "gymnasty_data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        importBtn.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        importFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const lines = text.split(/\r?\n/);
+                if (lines.length < 1) {
+                    alert("Invalid CSV file");
+                    return;
+                }
+                
+                let newAppData = { elements: [], history: {}, sessions: [] };
+                const parseCSVLine = (t) => {
+                    const re = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+                    return t.split(re).map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"'));
+                };
+                
+                // Allow missing headers validation or just rely on format
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    const cols = parseCSVLine(lines[i]);
+                    if (cols.length < 8) continue;
+                    
+                    const type = cols[0];
+                    const id = cols[1];
+                    
+                    if (type === 'Element') {
+                        newAppData.elements.push({ id: id, name: cols[2] });
+                    } else if (type === 'Session') {
+                        newAppData.sessions.push({ id: id, date: cols[3], duration: cols[4] });
+                    } else if (type === 'History') {
+                        if (!newAppData.history[id]) newAppData.history[id] = [];
+                        newAppData.history[id].push({
+                            date: cols[3],
+                            weight: cols[5],
+                            sets: cols[6],
+                            reps: cols[7]
+                        });
+                    }
+                }
+                
+                if (confirm('Importing will overwrite your existing data. Continue?')) {
+                    appData = newAppData;
+                    saveData();
+                    alert("Data imported successfully!");
+                    location.reload();
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = ''; // reset file input
+        });
+
         // --- EXERCISES VIEW ---
         function renderMasterList() {
             masterList.innerHTML = '';
-            
+
             if (appData.elements.length === 0) {
                 masterEmpty.classList.remove('hidden');
                 return;
             }
-            
+
             masterEmpty.classList.add('hidden');
 
             appData.elements.forEach(el => {
                 const li = document.createElement('li');
                 li.className = 'list-item-wrapper';
-                
+
                 li.innerHTML = `
                     <div class="delete-background">
                         <span>Delete</span>
@@ -619,9 +736,9 @@
                         <span style="color:var(--highlight-color); font-size: 1.5rem;">›</span>
                     </div>
                 `;
-                
+
                 const itemEl = li.querySelector('.list-item');
-                
+
                 itemEl.addEventListener('click', (e) => {
                     if (li.dataset.swiping === 'true') return;
                     showHistory(el);
@@ -631,34 +748,34 @@
                 let startX = 0;
                 let currentX = 0;
                 let isDragging = false;
-                
+
                 itemEl.addEventListener('touchstart', (e) => {
                     startX = e.touches[0].clientX;
                     isDragging = true;
                     li.dataset.swiping = 'false';
                     itemEl.style.transition = 'none';
-                }, {passive: true});
+                }, { passive: true });
 
                 itemEl.addEventListener('touchmove', (e) => {
                     if (!isDragging) return;
                     currentX = e.touches[0].clientX - startX;
-                    
+
                     if (Math.abs(currentX) > 10) {
                         li.dataset.swiping = 'true';
-                        if(e.cancelable) e.preventDefault(); 
+                        if (e.cancelable) e.preventDefault();
                     }
-                    
+
                     if (currentX > 100) currentX = 100;
                     if (currentX < -100) currentX = -100;
-                    
+
                     itemEl.style.transform = `translateX(${currentX}px)`;
-                }, {passive: false});
+                }, { passive: false });
 
                 itemEl.addEventListener('touchend', (e) => {
                     if (!isDragging) return;
                     isDragging = false;
                     itemEl.style.transition = 'transform 0.2s ease-out';
-                    
+
                     if (Math.abs(currentX) > 70) {
                         itemEl.style.transform = `translateX(${currentX > 0 ? 1000 : -1000}px)`;
                         setTimeout(() => deleteElement(el.id), 200);
@@ -703,12 +820,12 @@
         // --- SESSION SETUP ---
         startSessionBtn.addEventListener('click', () => {
             setupSelectedIds.clear();
-            
+
             // Auto-select exercises if we are adding mid-session
             if (activeSessionElements.length > 0) {
                 activeSessionElements.forEach(el => setupSelectedIds.add(el.id));
             }
-            
+
             renderSessionSetupList();
             switchView('session-setup-view', activeSessionElements.length > 0 ? 'Add Exercises' : 'Setup Session');
         });
@@ -720,7 +837,7 @@
 
         function renderSessionSetupList() {
             sessionSetupList.innerHTML = '';
-            
+
             // Check if we are adding mid-session
             const addingMidSession = activeSessionElements.length > 0;
             const alreadyInSessionIds = new Set(activeSessionElements.map(e => e.id));
@@ -730,21 +847,21 @@
             appData.elements.forEach(el => {
                 const li = document.createElement('li');
                 li.className = 'list-item-wrapper';
-                
+
                 const itemEl = document.createElement('div');
                 itemEl.className = 'list-item';
-                
+
                 const isAlreadyInSession = addingMidSession && alreadyInSessionIds.has(el.id);
-                
+
                 itemEl.innerHTML = `
                     <span>${el.name} ${isAlreadyInSession ? '<span style="font-size:0.8em; color:#888;">(In session)</span>' : ''}</span>
                     <span class="checkbox" style="color:var(--highlight-color); font-weight:bold;">${setupSelectedIds.has(el.id) ? '✓' : ''}</span>
                 `;
-                
+
                 if (setupSelectedIds.has(el.id)) {
                     itemEl.classList.add('selected');
                 }
-                
+
                 // If it's already in the session, we don't allow unselecting it from here just visually indicate it
                 if (isAlreadyInSession) {
                     itemEl.style.opacity = '0.6';
@@ -762,12 +879,12 @@
                         updateBeginWorkoutBtn();
                     });
                 }
-                
+
                 li.appendChild(itemEl);
                 sessionSetupList.appendChild(li);
             });
         }
-        
+
         function updateBeginWorkoutBtn() {
             if (setupSelectedIds.size > 0) {
                 beginWorkoutBtn.removeAttribute('disabled');
@@ -781,8 +898,8 @@
             document.querySelectorAll('.session-card').forEach(card => {
                 const id = card.dataset.id;
                 const setsInput = card.querySelector('.in-sets');
-                if(!setsInput) return;
-                
+                if (!setsInput) return;
+
                 const repInputs = card.querySelectorAll('.in-reps');
                 let repsArr = [];
                 repInputs.forEach(ri => repsArr.push(ri.value));
@@ -801,25 +918,25 @@
 
         beginWorkoutBtn.addEventListener('click', () => {
             if (setupSelectedIds.size === 0) return;
-            
+
             // Before re-rendering the active session, grab the current state of existing cards
             extractCurrentSessionState();
-            
+
             activeSessionElements = appData.elements.filter(e => setupSelectedIds.has(e.id));
-            
+
             renderActiveSession();
             switchView('active-session-view', 'Active Session');
         });
 
         function renderActiveSession() {
             activeSessionCards.innerHTML = '';
-            
+
             activeSessionElements.forEach((el) => {
-                
+
                 // Retrieve prior state if applying mid-session
                 const state = activeSessionInputs[el.id] || { weight: [], sets: 3, reps: [] };
                 const setsCount = parseInt(state.sets) || 3;
-                
+
                 const card = document.createElement('div');
                 card.className = 'session-card';
                 card.dataset.id = el.id;
@@ -836,7 +953,7 @@
                         <!-- Reps generated dynamically -->
                     </div>
                 `;
-                
+
                 const renderReps = (count) => {
                     const repsContainer = card.querySelector('.reps-container');
                     repsContainer.innerHTML = '';
@@ -846,11 +963,11 @@
                         repsContainer.innerHTML += `
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: end; background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 8px;">
                                 <div class="input-group" style="margin-bottom:0;">
-                                    <label style="color:var(--highlight-color); text-align:center;">Set ${i+1} Weight</label>
+                                    <label style="color:var(--highlight-color); text-align:center;">Set ${i + 1} Weight</label>
                                     <input type="number" inputmode="decimal" step="any" class="in-weight scrollable-num" data-id="${el.id}" placeholder="-" value="${weightVal}">
                                 </div>
                                 <div class="input-group" style="margin-bottom:0;">
-                                    <label style="color:var(--highlight-color); text-align:center;">Set ${i+1} Reps</label>
+                                    <label style="color:var(--highlight-color); text-align:center;">Set ${i + 1} Reps</label>
                                     <input type="number" inputmode="numeric" pattern="[0-9]*" class="in-reps scrollable-num" data-id="${el.id}" placeholder="-" value="${repVal}">
                                 </div>
                             </div>
@@ -859,7 +976,7 @@
                 };
 
                 renderReps(setsCount);
-                
+
                 // Remove card functionally mid-session
                 card.querySelector('.delete-card-btn').addEventListener('click', () => {
                     extractCurrentSessionState();
@@ -868,7 +985,7 @@
                     delete activeSessionInputs[el.id];
                     renderActiveSession();
                 });
-                
+
                 // Listen to Set changes to re-render rep boxes
                 const setsInput = card.querySelector('.in-sets');
                 setsInput.addEventListener('change', (e) => {
@@ -880,34 +997,34 @@
                     renderReps(newSets);
                     attachScrollWheelHandlers(); // re-attach for new inputs
                 });
-                
+
                 activeSessionCards.appendChild(card);
             });
-            
+
             // Attach scroll wheel logic
             attachScrollWheelHandlers();
         }
-        
+
         // --- SCROLL WHEEL TO ADJUST NUMBERS ---
         function attachScrollWheelHandlers() {
             document.querySelectorAll('.scrollable-num').forEach(input => {
                 input.addEventListener('wheel', (e) => {
                     if (document.activeElement !== input) return; // Only if focused
                     e.preventDefault();
-                    
+
                     let step = parseFloat(input.getAttribute('step')) || 1;
                     if (input.classList.contains('in-weight')) step = 2.5; // Common weight step
-                    
+
                     let val = parseFloat(input.value) || 0;
-                    
+
                     if (e.deltaY < 0) {
                         val += step; // Scroll up = increase
                     } else {
                         val -= step; // Scroll down = decrease
                     }
-                    
+
                     if (val < 0) val = 0;
-                    
+
                     // Format to remove trailing zeros if float
                     input.value = parseFloat(val.toFixed(2));
                 }, { passive: false });
@@ -930,14 +1047,14 @@
 
             const dateStr = new Date().toLocaleDateString(undefined, {
                 year: 'numeric', month: 'short', day: 'numeric',
-                hour: '2-digit', minute:'2-digit'
+                hour: '2-digit', minute: '2-digit'
             });
             const duration = durationInput.value.trim() || 'Unspecified';
 
             Object.keys(activeSessionInputs).forEach(id => {
                 const state = activeSessionInputs[id];
                 const sets = state.sets;
-                
+
                 let weightVals = [];
                 let repVals = [];
                 let hasInput = false;
@@ -1005,10 +1122,10 @@
         // --- HISTORY VIEW ---
         function showHistory(element) {
             historyTitle.textContent = `${element.name}`;
-            
+
             historyList.innerHTML = '';
             const hist = appData.history[element.id] || [];
-            
+
             if (hist.length === 0) {
                 historyEmpty.classList.remove('hidden');
             } else {
@@ -1037,5 +1154,5 @@
 
     </script>
 </body>
-</html>
 
+</html>
