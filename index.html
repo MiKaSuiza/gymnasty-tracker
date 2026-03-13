@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" href="Gymnasty.jpg">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gymnasty Tracker</title>
@@ -448,6 +448,7 @@
                 <!-- Dynamically populated -->
             </ul>
             <button id="begin-workout-btn" class="btn btn-primary mt-2" disabled>Begin Workout</button>
+            <button id="fab-add-session" class="fab">+</button>
         </section>
 
         <!-- ACTIVE SESSION VIEW -->
@@ -459,7 +460,10 @@
             <button id="add-to-session-btn" class="btn mt-1 mb-2" style="border-style: dashed; opacity: 0.8;">+ Add
                 Exercise to Session</button>
 
-            <button id="finish-session-btn" class="btn btn-primary mt-2">Finish Gym Session</button>
+            <div style="display: flex; gap: 1rem;">
+                <button id="cancel-session-btn" class="btn" style="flex: 1; border-color: var(--error-color); color: var(--error-color);">Cancel Session</button>
+                <button id="finish-session-btn" class="btn btn-primary" style="flex: 2;">Finish Session</button>
+            </div>
         </section>
 
         <!-- HISTORY VIEW -->
@@ -574,9 +578,11 @@
         const sessionSetupView = document.getElementById('session-setup-view');
         const sessionSetupList = document.getElementById('session-setup-list');
         const beginWorkoutBtn = document.getElementById('begin-workout-btn');
+        const fabAddSession = document.getElementById('fab-add-session');
 
         const activeSessionView = document.getElementById('active-session-view');
         const activeSessionCards = document.getElementById('active-session-cards');
+        const cancelSessionBtn = document.getElementById('cancel-session-btn');
         const finishSessionBtn = document.getElementById('finish-session-btn');
         const addToSessionBtn = document.getElementById('add-to-session-btn');
 
@@ -821,13 +827,16 @@
         }
 
         // --- FAB & NEW ELEMENT MODAL ---
-        fabAdd.addEventListener('click', () => {
+        const openNewElementModal = () => {
             editingElementId = null;
             if (modalTitle) modalTitle.textContent = 'New Fitness Element';
             modal.classList.remove('hidden');
             modalInput.value = '';
             setTimeout(() => modalInput.focus(), 100);
-        });
+        };
+
+        fabAdd.addEventListener('click', openNewElementModal);
+        fabAddSession.addEventListener('click', openNewElementModal);
 
         modalCancel.addEventListener('click', () => {
             modal.classList.add('hidden');
@@ -840,10 +849,18 @@
                     const el = appData.elements.find(e => e.id === editingElementId);
                     if (el) el.name = name;
                 } else {
-                    appData.elements.push({ id: generateId(), name: name });
+                    const newEl = { id: generateId(), name: name };
+                    appData.elements.push(newEl);
+                    if (currentView === 'session-setup-view') {
+                        setupSelectedIds.add(newEl.id);
+                    }
                 }
                 saveData();
-                renderMasterList();
+                if (currentView === 'session-setup-view') {
+                    renderSessionSetupList();
+                } else {
+                    renderMasterList();
+                }
                 modal.classList.add('hidden');
             }
         });
@@ -1070,6 +1087,15 @@
             });
         }
 
+        cancelSessionBtn.addEventListener('click', () => {
+            if (confirm('Cancel the current gym session? All data from this session will be lost.')) {
+                activeSessionElements = [];
+                activeSessionInputs = {};
+                setupSelectedIds.clear();
+                switchView('home-view', 'Gymnasty Tracker');
+            }
+        });
+
         finishSessionBtn.addEventListener('click', () => {
             durationModal.classList.remove('hidden');
             durationInput.value = '';
@@ -1195,6 +1221,3 @@
 </body>
 
 </html>
-
-
-
