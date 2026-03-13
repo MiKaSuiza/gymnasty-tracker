@@ -486,7 +486,7 @@
     <!-- Modal for New Element -->
     <div id="new-element-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h2 class="mb-2" style="color: var(--highlight-color);">New Fitness Element</h2>
+            <h2 id="modal-title" class="mb-2" style="color: var(--highlight-color);">New Fitness Element</h2>
             <div class="input-group">
                 <label for="element-name">Exercise Name</label>
                 <input type="text" id="element-name" placeholder="e.g. Bench Press" autocomplete="off">
@@ -545,6 +545,7 @@
         let setupSelectedIds = new Set();
         let activeSessionElements = []; // Full element objects
         let activeSessionInputs = {}; // Stores { weight, sets, reps: [rep1, rep2...] } per element ID
+        let editingElementId = null;
 
         // --- DOM ELEMENTS ---
         const views = document.querySelectorAll('.view');
@@ -580,6 +581,7 @@
         const historyList = document.getElementById('history-list');
 
         const modal = document.getElementById('new-element-modal');
+        const modalTitle = document.getElementById('modal-title');
         const modalInput = document.getElementById('element-name');
         const modalCancel = document.getElementById('modal-cancel');
         const modalSave = document.getElementById('modal-save');
@@ -732,12 +734,21 @@
                         <span>Delete</span>
                     </div>
                     <div class="list-item" data-id="${el.id}">
-                        <span>${el.name}</span>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <button class="edit-element-btn" style="background: none; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; padding: 0.25rem;">✎</button>
+                            <span>${el.name}</span>
+                        </div>
                         <span style="color:var(--highlight-color); font-size: 1.5rem;">›</span>
                     </div>
                 `;
 
                 const itemEl = li.querySelector('.list-item');
+                const editBtn = li.querySelector('.edit-element-btn');
+
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering full item click
+                    editElement(el);
+                });
 
                 itemEl.addEventListener('click', (e) => {
                     if (li.dataset.swiping === 'true') return;
@@ -748,12 +759,18 @@
                 let startX = 0;
                 let currentX = 0;
                 let isDragging = false;
+                let longPressTimer = null;
 
                 itemEl.addEventListener('touchstart', (e) => {
                     startX = e.touches[0].clientX;
                     isDragging = true;
                     li.dataset.swiping = 'false';
                     itemEl.style.transition = 'none';
+
+                    longPressTimer = setTimeout(() => {
+                        isDragging = false;
+                        editElement(el);
+                    }, 600);
                 }, { passive: true });
 
                 itemEl.addEventListener('touchmove', (e) => {
@@ -761,6 +778,7 @@
                     currentX = e.touches[0].clientX - startX;
 
                     if (Math.abs(currentX) > 10) {
+                        clearTimeout(longPressTimer);
                         li.dataset.swiping = 'true';
                         if (e.cancelable) e.preventDefault();
                     }
@@ -772,6 +790,7 @@
                 }, { passive: false });
 
                 itemEl.addEventListener('touchend', (e) => {
+                    clearTimeout(longPressTimer);
                     if (!isDragging) return;
                     isDragging = false;
                     itemEl.style.transition = 'transform 0.2s ease-out';
@@ -798,6 +817,8 @@
 
         // --- FAB & NEW ELEMENT MODAL ---
         fabAdd.addEventListener('click', () => {
+            editingElementId = null;
+            if (modalTitle) modalTitle.textContent = 'New Fitness Element';
             modal.classList.remove('hidden');
             modalInput.value = '';
             setTimeout(() => modalInput.focus(), 100);
@@ -810,12 +831,25 @@
         modalSave.addEventListener('click', () => {
             const name = modalInput.value.trim();
             if (name) {
-                appData.elements.push({ id: generateId(), name: name });
+                if (editingElementId) {
+                    const el = appData.elements.find(e => e.id === editingElementId);
+                    if (el) el.name = name;
+                } else {
+                    appData.elements.push({ id: generateId(), name: name });
+                }
                 saveData();
                 renderMasterList();
                 modal.classList.add('hidden');
             }
         });
+
+        function editElement(el) {
+            editingElementId = el.id;
+            if (modalTitle) modalTitle.textContent = 'Rename Exercise';
+            modal.classList.remove('hidden');
+            modalInput.value = el.name;
+            setTimeout(() => modalInput.focus(), 100);
+        }
 
         // --- SESSION SETUP ---
         startSessionBtn.addEventListener('click', () => {
