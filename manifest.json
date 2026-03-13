@@ -3,9 +3,9 @@
   "short_name": "Gymnasty",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "Gymnasty.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpg",
       "purpose": "any maskable"
     }
   ],
@@ -13,4 +13,5 @@
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#39FF14"
+
 }
